@@ -1,0 +1,22 @@
+{
+  "name": "web3-relay-client",
+  "version": "0.0.1",
+  "description": "Client library of the web3 relay, to be able to use Ethereum DApps with web3.js from any browser.",
+  "main": "web3_relay_client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PIWEEK/web3-relay.git"
+  },
+  "keywords": [
+    "ethereum",
+    "web3"
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/PIWEEK/web3-relay/issues"
+  },
+  "homepage": "https://github.com/PIWEEK/web3-relay#readme"
+}
