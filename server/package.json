@@ -1,0 +1,20 @@
+{
+  "name": "web3_relay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "web3_relay_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "leveldown": "^1.4.3",
+    "levelup": "^1.3.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "web3": "^0.15.1"
+  }
+}
