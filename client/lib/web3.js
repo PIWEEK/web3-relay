@@ -1,3 +1,5 @@
+'use strict';
+
 var Eth = require('./eth');
 
 function Web3 (provider) {

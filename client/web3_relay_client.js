@@ -1,10 +1,3 @@
-//var ChuskyContractDef = '<descriptor del contrato de los chuskys';
-//var ChuskyContract = web3.eth.contract(ChuskyContractDef);
-//
-//var chuskyContractInstance = ChuskyContract.at([<dirección de la instancia del contrato de chuskys>]);
-//
-//var result = chuskyContractInstance.metodoDelContratoChusky(arg1, arg2, arg3);
-
 'use strict';
 
 var Web3 = require('./lib/web3');

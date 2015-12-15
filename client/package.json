@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/PIWEEK/web3-relay/issues"
   },
-  "homepage": "https://github.com/PIWEEK/web3-relay#readme"
+  "homepage": "https://github.com/PIWEEK/web3-relay#readme",
+  "devDependencies": {
+    "webpack": "^1.12.9"
+  }
 }
