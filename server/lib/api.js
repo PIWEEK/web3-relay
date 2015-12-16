@@ -74,8 +74,14 @@ exports.contractMethodPost = function (request, response) {
     var methodName = request.params.methodname;
     var parameters = request.body;
 
+    console.log(address);
+    console.log(methodName);
+    console.log(parameters);
     var contract = contracts.get(address);
-    result = contract[methodName].apply(parameters);
+    result = contract[methodName](...parameters, {
+        "from": web3.eth.accounts[0],
+        "gas": 10000,
+    });
 
     response.json(result);
 }
