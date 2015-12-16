@@ -1,7 +1,9 @@
-//var Web3 = require('web3');
-//var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 var storage = require('./storage');
+
+var contracts = new Map();
 
 
 exports.accountsPost = function(request, response) {
@@ -56,15 +58,25 @@ exports.myAccountGet = function (request, response) {
 
 
 exports.contractsPost = function(request, response) {
-    console.log('name: ', request.body.name);
-    console.log('address: ', request.body.address);
-    console.log('abiArray: ', request.body.abiArray);
+    var abiArray = request.body.abiArray;
+    var address = request.body.address;
+
+    var ContractDef = web3.eth.contract(abiArray);
+    var contract = ContractDef.at(address);
+    contracts.set(address, contract);
+
     response.json({});
 }
 
 
 exports.contractMethodPost = function (request, response) {
-    console.log(request.body);
-    response.json({});
+    var address = request.params.address;
+    var methodName = request.params.methodname;
+    var parameters = request.body;
+
+    var contract = contracts.get(address);
+    result = contract[methodName].apply(parameters);
+
+    response.json(result);
 }
 

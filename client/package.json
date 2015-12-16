@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/PIWEEK/web3-relay#readme",
   "devDependencies": {
+    "json-loader": "^0.5.4",
     "webpack": "^1.12.9"
   },
   "dependencies": {
     "bignumber": "^1.1.0",
-    "utf8": "^2.1.1"
+    "exports-loader": "^0.6.2",
+    "imports-loader": "^0.6.5",
+    "utf8": "^2.1.1",
+    "whatwg-fetch": "^0.10.1"
   }
 }

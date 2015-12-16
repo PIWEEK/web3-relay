@@ -12,6 +12,9 @@ ContractFactory.prototype.at = function (address, callback) {
 
     addFunctionsToContract(contract);
 
+    var relay = this.eth.web3.relay;
+    relay.createContract(address, this.abi)
+
     if (callback) {
         callback(null, contract);
     }
