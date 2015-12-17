@@ -76,7 +76,8 @@ exports.contractMethodPost = function (request, response) {
     console.log(address + "." + methodName + "(" + parameters + ")");
 
     var contract = contracts.get(address);
-    var estimatedGas = contract[methodName].estimateGas();
+    var estimatedGas = 100000;
+    //var estimatedGas = contract[methodName].estimateGas();
     console.log("-> estimated gas:", estimatedGas);
 
     contract[methodName](...parameters, {
