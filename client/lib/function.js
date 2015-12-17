@@ -35,13 +35,21 @@ SolidityFunction.prototype.execute = function () {
     var callback = this.extractCallback(parameters);
 
     if (callback) {
-        relay.executeMethod(this._address, this.displayName(), parameters)
-            .then(function(response) {
+        relay.executeMethod(this._address, this.displayName(), parameters,
+            function(response) {
                 callback(null, response);
-            })
-            .catch(function(err) {
+            },
+            function(err) {
                 callback(err, null);
-            })
+            }
+        );
+        //relay.executeMethod(this._address, this.displayName(), parameters)
+        //    .then(function(response) {
+        //        callback(null, response);
+        //    })
+        //    .catch(function(err) {
+        //        callback(err, null);
+        //    })
     } else {
         relay.executeMethod(this._address, this.displayName(), parameters);
         // Don't know how to do a sync call with fetch.
