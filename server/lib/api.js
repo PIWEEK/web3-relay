@@ -73,16 +73,28 @@ exports.contractMethodPost = function (request, response) {
     var address = request.params.address;
     var methodName = request.params.methodname;
     var parameters = request.body;
+    console.log(address + "." + methodName + "(" + parameters + ")");
 
-    console.log(address);
-    console.log(methodName);
-    console.log(parameters);
     var contract = contracts.get(address);
-    result = contract[methodName](...parameters, {
-        "from": web3.eth.accounts[0],
-        "gas": 10000,
-    });
+    var estimatedGas = contract[methodName].estimateGas();
+    console.log("-> estimated gas:", estimatedGas);
 
-    response.json(result);
+    contract[methodName](...parameters, {
+        "from": web3.eth.accounts[0],
+        "gas": estimatedGas * 2,
+    }, function (err, res) {
+        if (err) {
+            console.log("#####", err);
+            response.json({});
+        } else {
+            if (res) {
+                console.log("===>", JSON.stringify(res));
+                response.json(JSON.stringify(res));
+            } else {
+                console.log("===> <empty>");
+                response.json({});
+            }
+        }
+    });
 }
 
