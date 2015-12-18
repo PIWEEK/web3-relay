@@ -32,7 +32,8 @@ exports.getAccountsPublic = function (callback) {
     accountsDB.createValueStream()
         .on('data', function (value) {
             accounts.push({
-                'name': value.name
+                'name': value.name,
+                'address': value.address
             });
         })
         .on('end', function () {
