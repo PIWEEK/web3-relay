@@ -7,11 +7,21 @@ var contracts = new Map();
 
 
 exports.accountsPost = function(request, response) {
+    var address;
+    if (request.body.name === "pepe") {
+        address = "0x14762611b13af65985bd66cbc06ab7a66d343ce4";
+    } else if (request.body.name === "manolo") {
+        address = "0x584904ea7b5d58542e3077a97b8b5742885131f6";
+    } else if (request.body.name === "luis") {
+        address = "0x447c9c649e532339523720ccb108dc6dcd2b7fe0";
+    } else {
+	address = '0x0060eb8b32e4a20a80bc112a00f9de4a0d204e47';
+    }
     var account = {
         'name': request.body.name,
         'email': request.body.email,
         'password': request.body.password,
-	'address': '0x0060eb8b32e4a20a80bc112a00f9de4a0d204e47',
+	'address': address,
     }
 
     storage.createAccount(account);
