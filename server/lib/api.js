@@ -73,12 +73,9 @@ exports.accountLogin = function(request, response) {
 
 
 exports.myAccountGet = function (request, response) {
-    // Provisional until authentication works: get the first account
-    storage.getAccountsPublic(function (accounts) {
-        if (accounts.length > 0) {
-            storage.getAccount(accounts[0].name, function (err, account) {
-                response.json(account);
-            });
+    _extractLoggedAccount(request, function (loggedAccount) {
+        if (loggedAccount) {
+            response.json(loggedAccount)
         } else {
             response.status(403).end();
         }
@@ -99,32 +96,57 @@ exports.contractsPost = function(request, response) {
 
 
 exports.contractMethodPost = function (request, response) {
-    var address = request.params.address;
-    var methodName = request.params.methodname;
-    var parameters = request.body;
-    console.log(address + "." + methodName + "(" + parameters + ")");
-
-    var contract = contracts.get(address);
-    var estimatedGas = 100000;
-    //var estimatedGas = contract[methodName].estimateGas();
-    //console.log("-> estimated gas:", estimatedGas);
-
-    contract[methodName](...parameters, {
-        "from": web3.eth.accounts[0],
-        "gas": estimatedGas * 2,
-    }, function (err, res) {
-        if (err) {
-            console.log("#####", err);
-            response.json({});
+    _extractLoggedAccount(request, function (loggedAccount) {
+        var fromAddress;
+        if (loggedAccount) {
+            fromAddress = loggedAccount.address;
         } else {
-            if (res) {
-                console.log("===>", res);
-                response.json(res);
-            } else {
-                console.log("===> <empty>");
-                response.json({});
-            }
+            fromAddress = web3.eth.accounts[0];
         }
+
+        var address = request.params.address;
+        var methodName = request.params.methodname;
+        var parameters = request.body;
+        console.log(address + "." + methodName + "(" + parameters + ")");
+
+        var contract = contracts.get(address);
+        var estimatedGas = 100000;
+        //var estimatedGas = contract[methodName].estimateGas();
+        //console.log("-> estimated gas:", estimatedGas);
+
+        contract[methodName](...parameters, {
+            "from": fromAddress,
+            "gas": estimatedGas * 2,
+        }, function (err, res) {
+            if (err) {
+                console.log("#####", err);
+                response.json({});
+            } else {
+                if (res) {
+                    console.log("===>", res);
+                    response.json(res);
+                } else {
+                    console.log("===> <empty>");
+                    response.json({});
+                }
+            }
+        });
     });
+}
+
+
+var _extractLoggedAccount = function(request, callback) {
+    name = request.header("web3-account");
+    if (name) {
+        storage.getAccount(name, function (err, account) {
+            if (account) {
+                callback(account);
+            } else {
+                callback(null);
+            }
+        });
+    } else {
+        callback(null);
+    }
 }
 
