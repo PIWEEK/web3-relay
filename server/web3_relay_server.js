@@ -17,6 +17,7 @@ app.use(function(req, res, next) {
 app.post(PREFIX + '/accounts', api.accountsPost);
 app.get(PREFIX + '/accounts', api.accountsGet);
 app.get(PREFIX + '/accounts/:name', api.accountGet);
+app.post(PREFIX + '/accounts/:name/login', api.accountLogin);
 app.get(PREFIX + '/my-account', api.myAccountGet);
 app.post(PREFIX + '/contracts', api.contractsPost);
 app.post(PREFIX + '/contracts/:address/:methodname', api.contractMethodPost);

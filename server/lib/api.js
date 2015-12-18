@@ -45,7 +45,26 @@ exports.accountGet = function(request, response) {
         if (account) {
             response.json({
                 'name': account.name,
+                'address': account.address,
             });
+        } else {
+            response.status(404).end();
+        }
+    });
+}
+
+
+exports.accountLogin = function(request, response) {
+    storage.getAccount(request.params.name, function (err, account) {
+        if (account) {
+            if (account.password === request.body.password) {
+                response.json({
+                    'name': account.name,
+                    'address': account.address,
+                });
+            } else {
+                response.status(403).end();
+            }
         } else {
             response.status(404).end();
         }
