@@ -31,9 +31,6 @@ exports.accountsPost = function(request, response) {
 
 
 exports.accountsGet = function(request, response) {
-    //var accounts = web3.eth.accounts;
-    //console.log(accounts);
-
     storage.getAccountsPublic(function (accounts) {
         response.json(accounts);
     });
@@ -107,17 +104,27 @@ exports.contractMethodPost = function (request, response) {
         var address = request.params.address;
         var methodName = request.params.methodname;
         var parameters = request.body;
-        console.log(address + "." + methodName + "(" + parameters + ")");
+        var mode = request.query.mode || 'transaction';
+        console.log(address + "." + methodName + "(" + parameters + ") [" + mode + "]");
 
         var contract = contracts.get(address);
         var estimatedGas = 100000;
         //var estimatedGas = contract[methodName].estimateGas();
         //console.log("-> estimated gas:", estimatedGas);
 
-        contract[methodName](...parameters, {
+        var options = {
             "from": fromAddress,
             "gas": estimatedGas * 2,
-        }, function (err, res) {
+        };
+
+        var methodFunction;
+        if (mode === 'call') {
+            methodFunction = contract[methodName].call;
+        } else {
+            methodFunction = contract[methodName];
+        }
+
+        methodFunction(...parameters, options, function (err, res) {
             if (err) {
                 console.log("#####", err);
                 response.json({});

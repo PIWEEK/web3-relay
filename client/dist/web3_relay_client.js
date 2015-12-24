@@ -158,6 +158,7 @@
 	    this._eth = eth;
 	    this._name = utils.transformToFullName(json);
 	    this._address = address;
+	    this._constant = json.constant;
 	};
 
 	SolidityFunction.prototype.displayName = function () {
@@ -186,8 +187,15 @@
 	    // If callback, extract it and remove from parameters
 	    var callback = this.extractCallback(parameters);
 
+	    var mode;
+	    if (this._constant) {
+	        mode = 'call';
+	    } else {
+	        mode = 'transaction';
+	    }
+
 	    if (callback) {
-	        relay.executeMethod(this._address, this.displayName(), parameters,
+	        relay.executeMethod(this._address, this.displayName(), parameters, mode,
 	            function(response) {
 	                callback(null, response);
 	            },
@@ -195,15 +203,8 @@
 	                callback(err, null);
 	            }
 	        );
-	        //relay.executeMethod(this._address, this.displayName(), parameters)
-	        //    .then(function(response) {
-	        //        callback(null, response);
-	        //    })
-	        //    .catch(function(err) {
-	        //        callback(err, null);
-	        //    })
 	    } else {
-	        relay.executeMethod(this._address, this.displayName(), parameters);
+	        relay.executeMethod(this._address, this.displayName(), parameters, mode);
 	        // Don't know how to do a sync call with fetch.
 	    }
 	};
@@ -2895,11 +2896,8 @@
 	    return this._apiCall('/contracts', 'post', payload, cbOk, cbError);
 	};
 
-	Relay.prototype.executeMethod = function (address, methodName, parameters, cbOk, cbError) {
-	    return this._apiCall('/contracts/' + address + '/' + methodName, 'post', parameters, cbOk, cbError);
-	        //.then(function (response) {
-	        //    return response.json();
-	        //});
+	Relay.prototype.executeMethod = function (address, methodName, parameters, mode, cbOk, cbError) {
+	    return this._apiCall('/contracts/' + address + '/' + methodName + '?mode=' + mode, 'post', parameters, cbOk, cbError);
 	};
 
 	Relay.prototype._apiCall = function (path, method, payload, cbOk, cbError) {
@@ -2913,16 +2911,6 @@
 	    xmlhttp.setRequestHeader('Accept', 'application/json');
 	    xmlhttp.setRequestHeader('Content-Type', 'application/json');
 	    xmlhttp.send(JSON.stringify(payload));
-
-
-	    //return fetch(this.baseUrl + path, {
-	    //    method: method,
-	    //    headers: {
-	    //        'Accept': 'application/json',
-	    //        'Content-Type': 'application/json'
-	    //    },
-	    //    body: JSON.stringify(payload)
-	    //});
 	}
 
 	module.exports = Relay;

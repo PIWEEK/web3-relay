@@ -12,11 +12,8 @@ Relay.prototype.createContract = function (address, abiArray, cbOk, cbError) {
     return this._apiCall('/contracts', 'post', payload, cbOk, cbError);
 };
 
-Relay.prototype.executeMethod = function (address, methodName, parameters, cbOk, cbError) {
-    return this._apiCall('/contracts/' + address + '/' + methodName, 'post', parameters, cbOk, cbError);
-        //.then(function (response) {
-        //    return response.json();
-        //});
+Relay.prototype.executeMethod = function (address, methodName, parameters, mode, cbOk, cbError) {
+    return this._apiCall('/contracts/' + address + '/' + methodName + '?mode=' + mode, 'post', parameters, cbOk, cbError);
 };
 
 Relay.prototype._apiCall = function (path, method, payload, cbOk, cbError) {
@@ -30,16 +27,6 @@ Relay.prototype._apiCall = function (path, method, payload, cbOk, cbError) {
     xmlhttp.setRequestHeader('Accept', 'application/json');
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(JSON.stringify(payload));
-
-
-    //return fetch(this.baseUrl + path, {
-    //    method: method,
-    //    headers: {
-    //        'Accept': 'application/json',
-    //        'Content-Type': 'application/json'
-    //    },
-    //    body: JSON.stringify(payload)
-    //});
 }
 
 module.exports = Relay;
