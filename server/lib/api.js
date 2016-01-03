@@ -2,6 +2,7 @@ var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 var storage = require('./storage');
+var auth = require('./auth');
 
 var contracts = new Map();
 
@@ -55,10 +56,11 @@ exports.accountLogin = function(request, response) {
     storage.getAccount(request.params.name, function (err, account) {
         if (account) {
             if (account.password === request.body.password) {
-                response.json({
-                    'name': account.name,
-                    'address': account.address,
-                });
+                return auth.login(account, response)
+                       .json({
+                           'name': account.name,
+                           'address': account.address,
+                       });
             } else {
                 response.status(403).end();
             }
@@ -143,7 +145,7 @@ exports.contractMethodPost = function (request, response) {
 
 
 var _extractLoggedAccount = function(request, callback) {
-    name = request.header("web3-account");
+    name = request.user["name"];
     if (name) {
         storage.getAccount(name, function (err, account) {
             if (account) {
