@@ -15,6 +15,10 @@ exports.accountsPost = function(request, response) {
         address = "0x584904ea7b5d58542e3077a97b8b5742885131f6";
     } else if (request.body.name === "luis") {
         address = "0x447c9c649e532339523720ccb108dc6dcd2b7fe0";
+    } else if (request.body.name === "user1") {
+        address = "0x6b255295e4c3458d75016f1d3e497d00f936c8c0";
+    } else if (request.body.name === "user2") {
+        address = "0xbcb415a24ce5d21818c982ea188b9262dc74c0c0";
     } else {
 	address = '0x0060eb8b32e4a20a80bc112a00f9de4a0d204e47';
     }
@@ -107,6 +111,7 @@ exports.contractMethodPost = function (request, response) {
         var methodName = request.params.methodname;
         var parameters = request.body;
         var mode = request.query.mode || 'transaction';
+        console.log("[from " + fromAddress + "]");
         console.log(address + "." + methodName + "(" + parameters + ") [" + mode + "]");
 
         var contract = contracts.get(address);
